@@ -1,0 +1,30 @@
+{
+  "name": "antd-dynamic-form",
+  "version": "0.1.1-alpha.0",
+  "description": "Generate React antd form dynamically.",
+  "main": "src/index.js",
+  "scripts": {},
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "antd": "^3.18.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slugs99/antd-dynamic-form.git"
+  },
+  "keywords": [
+    "antd",
+    "dynamic",
+    "form"
+  ],
+  "author": "Tyro Hunter Tan <tantyrohunter@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/slugs99/antd-dynamic-form/issues"
+  },
+  "homepage": "https://github.com/slugs99/antd-dynamic-form#readme",
+  "dependencies": {
+    "antd": "^3.18.2",
+    "react": "^16.8.6"
+  }
+}
