@@ -1,9 +1,11 @@
 {
   "name": "antd-dynamic-form",
-  "version": "0.1.1-alpha.0",
+  "version": "0.1.1-alpha.1",
   "description": "Generate React antd form dynamically.",
-  "main": "src/index.js",
-  "scripts": {},
+  "main": "build/index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/babel src --out-file build/index.js"
+  },
   "peerDependencies": {
     "react": "^16.8.6",
     "antd": "^3.18.2"
@@ -26,5 +28,11 @@
   "dependencies": {
     "antd": "^3.18.2",
     "react": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0"
   }
 }
