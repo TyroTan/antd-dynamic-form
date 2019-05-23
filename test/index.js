@@ -2,7 +2,7 @@ import React from "react";
 // import { connect } from "react-redux";
 // import { Button, Divider, Icon, Input, Form, message, Modal } from "antd";
 import { Button, Col, Form, Input, Row } from "antd";
-import DynamicForm from "./DynamicForm";
+import DynamicForm from "../dist/main";
 
 const { useState } = React;
 
