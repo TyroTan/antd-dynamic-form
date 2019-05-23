@@ -1,12 +1,26 @@
+import * as ReactDOM from 'react-dom';
+window.ReactDOM = ReactDOM;
+
+/*
+describe('My First Test', function() {
+  it('finds the content "type"', function() {
+    cy.visit('localhost:8080')
+
+    cy.contains('her!!')
+  })
+})
+*/
+
+// load Cypress TypeScript definitions for IntelliSense
+/// <reference types="cypress" />
+// import the component you want to test
 import React from "react";
-// import { connect } from "react-redux";
-// import { Button, Divider, Icon, Input, Form, message, Modal } from "antd";
 import { Button, Col, Form, Input, Row } from "antd";
-import DynamicForm from "../dist/main";
+const DynamicForm = require( "../../src/lib/index.js");
 
 const { useState } = React;
 
-const Wrapped = props => {
+const Test1 = props => {
   const { form } = props;
   const { getFieldDecorator } = form;
   const refs = {};
@@ -127,7 +141,6 @@ const Wrapped = props => {
         ]
       }}
       wrapper={props => {
-        console.log("render props", props);
         return <Form>{props.getContents()}</Form>;
       }}
       items={state.items}
@@ -135,4 +148,16 @@ const Wrapped = props => {
   );
 };
 
-export default Form.create({})(Wrapped);
+const WrappedTest1 = Form.create({})(Test1);
+
+describe("Initial Test", () => {
+  it("works", () => {
+    // mount the component under test
+    cy.mount(<Row><Col><WrappedTest1 /></Col></Row>);
+    cy.get("input").should('have.length', 3)
+    cy.get("input").first().clear().type('creat');
+    cy.get("input").should('have.length', 3);
+    cy.get("input").first().type('e');
+    cy.get("input").should('have.length', 4);
+  });
+});

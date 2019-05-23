@@ -1,5 +1,11 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const path = require("path");
 module.exports = {
+  entry: './src/lib/index.js',
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'index.js',
+    libraryTarget: 'commonjs2'
+  },
   module: {
     rules: [
       {
@@ -8,22 +14,7 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: "html-loader",
-            options: { minimize: true }
-          }
-        ]
       }
     ]
-  },
-  plugins: [
-    new HtmlWebPackPlugin({
-      template: "./src/index.html",
-      filename: "./index.html"
-    })
-  ]
+  }
 };

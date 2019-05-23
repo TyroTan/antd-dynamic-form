@@ -70,3 +70,5 @@ typings/
 .cache
 
 *.DS_Store
+cypress/
+cypress.json
