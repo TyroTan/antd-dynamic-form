@@ -1,4 +1,5 @@
 import React from "react";
+const { Fragment } = React;
 
 const sortContents = arr => {
   return arr.sort((a, b) => {
@@ -80,7 +81,9 @@ const RenderWithTemplate = Settings => {
                 currentNode.indexOf(containerKey) === 0 &&
                 currentNode.length - 1 === containerKey.length
               ) {
-                nodes = nodes.concat([acc[currentNode]()]);
+                nodes = nodes.concat([
+                  <Fragment key={currentNode}>{acc[currentNode]()}</Fragment>
+                ]);
               }
 
               return nodes;
@@ -103,7 +106,7 @@ const RenderWithTemplate = Settings => {
       .filter(k => k.length === 1)
       .sort(sortStringKey)
       .map(container => {
-        return toRender[container]();
+        return <Fragment key={container}>{toRender[container]()}</Fragment>;
       });
   }
 
