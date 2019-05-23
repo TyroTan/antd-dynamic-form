@@ -1,6 +1,6 @@
 {
   "name": "antd-dynamic-form",
-  "version": "0.1.1-alpha.1",
+  "version": "0.1.1-alpha.2",
   "description": "Generate React antd form dynamically.",
   "main": "build/index.js",
   "scripts": {
