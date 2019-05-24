@@ -1,6 +1,17 @@
 import React from "react";
 const { Fragment } = React;
 
+const omitFields = (target, choices) => {
+  const newObj = {};
+
+  Object.keys(target).forEach(key => {
+    if (choices[key] === true) return;
+    newObj[key] = target[key];
+  });
+
+  return newObj;
+};
+
 const sortContents = arr => {
   return arr.sort((a, b) => {
     if (a.container.length === b.container.length) {
@@ -18,20 +29,64 @@ const sortStringKey = (a, b) => {
   return a.length < b.length;
 };
 
-const Render = Settings => {
-  return (
-    <Settings.Form>
-      {ppp =>
-        Settings.data.map(field => {
-          return <Settings.RenderItem {...field} />;
-        })
-      }
-    </Settings.Form>
-  );
+const isAntdComponentDefined = (Settings = {}, type) => {
+  if (!Settings[type]) {
+    throw Error(
+      `Missing "${type}" component. "<AntdDynamicForm AntdComponents={{ ${type}..."`
+    );
+  }
 };
 
-const RenderItem = item => {
-  return <div>default renderItem</div>;
+const helperGetInputType = (Settings, item) => {
+  switch (item.type) {
+    case "slider":
+      isAntdComponentDefined(Settings, "Slider");
+      // return React.forwardRef((props, ref) => <Settings.Slider {...{...item.propsItem, ref}} />);
+      return React.forwardRef((props, ref) => {
+        // console.log("hugatsas", item.propsItem, { ...{ ...props, ref } });
+        // const sliderProp = { ...props, ref };
+        // delete sliderProp.value;
+        // delete sliderProp.defaultValue;
+        return <Settings.Slider {...item.propsItem} />;
+      });
+    case "button":
+      isAntdComponentDefined(Settings, "Button");
+      return React.forwardRef((props, ref) => <Settings.Button {...{...props, ref}} />);
+    default:
+      isAntdComponentDefined(Settings, "Input");
+      return React.forwardRef((props, ref) => {
+        return <Settings.Input {...{...props, ref}} />
+      });
+  }
+};
+
+const Render = Settings => {
+  if (!Settings.Form) {
+    throw Error(
+      `Missing "Form" component. "<AntdDynamicForm AntdComponents={{ Form..."`
+    );
+  }
+  if (!Settings.RenderItem) {
+    throw Error(
+      `Missing "renderItem". "<AntdDynamicForm renderItem={(item) => {...`
+    );
+  }
+
+  return (
+    <Settings.Form {...Settings.formProps}>
+      {Settings.items.map(field => {
+        const arg = {
+          ...field,
+          InputType: helperGetInputType(Settings, field)
+        };
+
+        // TODO: finalise requiring "key" instead
+        const key = field.propsItem.name ? field.propsItem.name : field.propsItem.id;
+
+        return <Settings.RenderItem key={key} {...arg} />;
+      })}
+    </Settings.Form>
+  );
 };
 
 const RenderWithTemplate = Settings => {
@@ -113,14 +168,24 @@ const RenderWithTemplate = Settings => {
   return <></>;
 };
 
-const DynamicForm = props => {
+const AntdDynamicForm = props => {
+  const { AntdComponents = {}, items = [] } = props;
+  if (AntdComponents.Form) {
+    AntdComponents.formProps = omitFields(props, {
+      AntdComponents: true,
+      items: true,
+      renderItem: true,
+      render: true,
+      template: true
+    });
+  }
   const Settings = {
-    // Form,
+    ...AntdComponents,
     // formInstance: props.form ? props.form : Form.create({}),
-    items: props.items,
-    RenderItem: props.renderItem ? props.renderItem : RenderItem,
-    renderWrapper: props.wrapper
-      ? props.wrapper
+    items,
+    RenderItem: props.renderItem,
+    render: props.render
+      ? props.render
       : params => {
           return <Render {...Settings} />;
         },
@@ -132,10 +197,14 @@ const DynamicForm = props => {
         : []
   };
 
+  if (!Settings.items.length) {
+    return <div/>
+  }
+
   if (Settings.templateContents.length) {
     return (
       <>
-        {Settings.renderWrapper({
+        {Settings.render({
           ...Settings,
           getContents(ppp) {
             return <RenderWithTemplate {...Settings} />;
@@ -147,7 +216,7 @@ const DynamicForm = props => {
 
   return (
     <>
-      {Settings.renderWrapper({
+      {Settings.render({
         ...Settings,
         getContents: ppp =>
           Settings.items.map(field => {
@@ -158,4 +227,4 @@ const DynamicForm = props => {
   );
 };
 
-export default DynamicForm;
+export default AntdDynamicForm;
