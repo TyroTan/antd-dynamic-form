@@ -1,11 +1,12 @@
 {
   "name": "antd-dynamic-form",
-  "version": "0.1.1-alpha.2",
+  "version": "0.2.0-alpha.0",
   "description": "Generate React antd form dynamically.",
   "main": "build/index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --open",
     "test:cypress:dev": "npm-run-all --parallel --race start 'cy:open -- --config baseUrl=http://localhost:8080'",
+    "test:spec": "./node_modules/cypress/bin/cypress run --spec cypress/integration/input_fields_spec.js  -b chrome",
     "cy:open": "cypress open",
     "dev": "webpack --mode development",
     "build": "webpack --mode production"
